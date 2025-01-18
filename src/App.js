@@ -34,10 +34,14 @@ function reducer(state, action) {
       return { ...state, balance: state.balance + 150 };
     case "withdraw":
       return { ...state, balance: state.balance - 50 };
-    case "requestLoan": // todo: request only once, unless you have paid off existing loan
-      return { ...state, balance: state.balance + 5000, loan: state.loan + 5000 };
-    case "payLoan": // todo: can only pay if enough money
-      return { ...state, balance: state.balance - state.loan, loan: 0 };
+    case "requestLoan":
+      // request only once, unless you have paid off existing loan
+      if (state.loan <= 0) return { ...state, balance: state.balance + 5000, loan: state.loan + 5000 };
+      else return state;
+    case "payLoan":
+      // can only pay if enough money
+      if (state.balance >= state.loan) return { ...state, balance: state.balance - state.loan, loan: 0 };
+      else return state;
     default:
       return Error("Unkown action type");
   }
