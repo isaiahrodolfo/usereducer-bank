@@ -30,6 +30,10 @@ function reducer(state, action) {
       return { ...state, isActive: true, balance: 500 }
     case "close":
       return initialState;
+    case "deposit":
+      return { ...state, balance: state.balance + 150 };
+    case "withdraw":
+      return { ...state, balance: state.balance - 50 };
     default:
       return Error("Unkown action type");
   }
@@ -50,12 +54,12 @@ export default function App() {
         </button>
       </p>
       <p>
-        <button onClick={() => { }} disabled={false}>
+        <button onClick={() => { dispatch({ type: "deposit" }) }} disabled={false}>
           Deposit 150
         </button>
       </p>
       <p>
-        <button onClick={() => { }} disabled={false}>
+        <button onClick={() => { dispatch({ type: "withdraw" }) }} disabled={false}>
           Withdraw 50
         </button>
       </p>
