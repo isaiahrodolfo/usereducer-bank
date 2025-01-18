@@ -26,14 +26,18 @@ const initialState = {
 
 function reducer(state, action) {
   switch (action.type) {
-    case "open":
-      return { ...state, isActive: true, balance: 500 }
+    case "open": // todo: only do things if opened an account first (isActive == true)
+      return { ...state, isActive: true, balance: 500 };
     case "close":
       return initialState;
     case "deposit":
       return { ...state, balance: state.balance + 150 };
     case "withdraw":
       return { ...state, balance: state.balance - 50 };
+    case "requestLoan": // todo: request only once, unless you have paid off existing loan
+      return { ...state, balance: state.balance + 5000, loan: state.loan + 5000 };
+    case "payLoan": // todo: can only pay if enough money
+      return { ...state, balance: state.balance - state.loan, loan: 0 };
     default:
       return Error("Unkown action type");
   }
@@ -64,12 +68,12 @@ export default function App() {
         </button>
       </p>
       <p>
-        <button onClick={() => { }} disabled={false}>
+        <button onClick={() => { dispatch({ type: "requestLoan" }) }} disabled={false}>
           Request a loan of 5000
         </button>
       </p>
       <p>
-        <button onClick={() => { }} disabled={false}>
+        <button onClick={() => { dispatch({ type: "payLoan" }) }} disabled={false}>
           Pay loan
         </button>
       </p>
