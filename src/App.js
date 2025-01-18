@@ -1,4 +1,4 @@
-import "./styles.css";
+import { useReducer } from "react"
 
 /*
 INSTRUCTIONS / CONSIDERATIONS:
@@ -24,40 +24,53 @@ const initialState = {
   isActive: false
 };
 
+function reducer(state, action) {
+  switch (action.type) {
+    case "open":
+      return { ...state, isActive: true, balance: 500 }
+    case "close":
+      return initialState;
+    default:
+      return Error("Unkown action type");
+  }
+}
+
 export default function App() {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
   return (
     <div className="App">
       <h1>useReducer Bank Account</h1>
-      <p>Balance: X</p>
-      <p>Loan: X</p>
+      <p>Balance: {state.balance}</p>
+      <p>Loan: {state.loan}</p>
 
       <p>
-        <button onClick={() => {}} disabled={false}>
+        <button onClick={() => { dispatch({ type: "open" }) }} disabled={false}>
           Open account
         </button>
       </p>
       <p>
-        <button onClick={() => {}} disabled={false}>
+        <button onClick={() => { }} disabled={false}>
           Deposit 150
         </button>
       </p>
       <p>
-        <button onClick={() => {}} disabled={false}>
+        <button onClick={() => { }} disabled={false}>
           Withdraw 50
         </button>
       </p>
       <p>
-        <button onClick={() => {}} disabled={false}>
+        <button onClick={() => { }} disabled={false}>
           Request a loan of 5000
         </button>
       </p>
       <p>
-        <button onClick={() => {}} disabled={false}>
+        <button onClick={() => { }} disabled={false}>
           Pay loan
         </button>
       </p>
       <p>
-        <button onClick={() => {}} disabled={false}>
+        <button onClick={() => { dispatch({ type: "close" }) }} disabled={false}>
           Close account
         </button>
       </p>
