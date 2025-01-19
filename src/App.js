@@ -28,7 +28,7 @@ function reducer(state, action) {
   switch (action.type) {
     case "open":
       // only open a new account if one has not already been opened
-      if (!state.isActive) return state;
+      if (state.isActive) return state;
       else return { ...state, isActive: true, balance: 500 };
     case "close":
       // only close an account if no loan and an account is already active
@@ -38,7 +38,9 @@ function reducer(state, action) {
       if (state.isActive) return { ...state, balance: state.balance + 150 };
       else return state;
     case "withdraw":
-      if (state.isActive) return { ...state, balance: state.balance - 50 };
+      const newBalance = state.balance - 50;
+      // ensure new balance is not negative after withdrawing
+      if (newBalance >= 0 && state.isActive) return { ...state, balance: newBalance };
       else return state;
     case "requestLoan":
       // request only once, unless you have paid off existing loan
