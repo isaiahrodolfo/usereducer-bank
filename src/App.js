@@ -26,21 +26,27 @@ const initialState = {
 
 function reducer(state, action) {
   switch (action.type) {
-    case "open": // todo: only do things if opened an account first (isActive == true)
-      return { ...state, isActive: true, balance: 500 };
+    case "open":
+      // only open a new account if one has not already been opened
+      if (!state.isActive) return state;
+      else return { ...state, isActive: true, balance: 500 };
     case "close":
-      return initialState;
+      // only close an account if no loan and an account is already active
+      if (state.loan === 0 && state.isActive) return initialState;
+      else return state;
     case "deposit":
-      return { ...state, balance: state.balance + 150 };
+      if (state.isActive) return { ...state, balance: state.balance + 150 };
+      else return state;
     case "withdraw":
-      return { ...state, balance: state.balance - 50 };
+      if (state.isActive) return { ...state, balance: state.balance - 50 };
+      else return state;
     case "requestLoan":
       // request only once, unless you have paid off existing loan
-      if (state.loan <= 0) return { ...state, balance: state.balance + 5000, loan: state.loan + 5000 };
+      if (state.loan <= 0 && state.isActive) return { ...state, balance: state.balance + 5000, loan: state.loan + 5000 };
       else return state;
     case "payLoan":
       // can only pay if enough money
-      if (state.balance >= state.loan) return { ...state, balance: state.balance - state.loan, loan: 0 };
+      if (state.balance >= state.loan && state.isActive) return { ...state, balance: state.balance - state.loan, loan: 0 };
       else return state;
     default:
       return Error("Unkown action type");
